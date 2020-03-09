@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ModMetaData>
+   <name>Memory Implants</name>
+   <author>Chrido</author>
+   <supportedVersions>
+      <li>1.1</li>
+   </supportedVersions>
+   <modDependencies>
+      <li>
+         <packageId>Ludeon.RimWorld.Royalty</packageId>
+         <displayName>Royalty</displayName>
+      </li>
+      <li>
+         <packageId>brrainz.harmony</packageId>
+         <displayName>Harmony</displayName>
+         <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+         <downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
+      </li>
+   </modDependencies>
+   <loadAfter>
+      <li>Ludeon.RimWorld</li>
+      <li>Ludeon.RimWorld.Royalty</li>
+      <li>brrainz.harmony</li>
+   </loadAfter>
+   <packageId>chrido.memoryimplants</packageId>
+   <description>This mod adds implants similar to Neural Computation, but for memory to slow the rate of skill loss to just 20% of the original value.
+    
+The drawback is that the pawn will get brain shocked by EMP damage and also has a penalty to learning.
+
+Needs a techprint to be researched.
+
+Memory assistant
+   Skill loss 20%
+   Learning speed -20%
+   
+REQUIRES ROYALTY DLC!
+   </description>
+</ModMetaData>

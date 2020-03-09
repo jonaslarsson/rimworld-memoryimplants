@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ResearchProjectDef ParentName="BaseBodyPartEmpire_TierB">
+    <defName>MemoryImplants</defName>
+    <label>memory implants</label>
+    <description>Craft brain implants that assist memory by use of a direct, shallow brain-computer interface.</description>
+    <prerequisites>
+      <li>Fabrication</li>
+    </prerequisites>
+    <hiddenPrerequisites><li>Prosthetics</li></hiddenPrerequisites>
+    <researchViewX>18.00</researchViewX>
+    <researchViewY>4.80</researchViewY>
+  </ResearchProjectDef>
+
+</Defs>
