@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Memory assistant -->
+  
+  <HediffDef ParentName="ImplantHediffBase">
+    <defName>MemoryAssistant</defName>
+    <label>memory assistant</label>
+    <labelNoun>a memory assistant</labelNoun>
+    <description>An installed memory assistant.</description>
+    <descriptionHyperlinks><ThingDef>MemoryAssistant</ThingDef></descriptionHyperlinks>
+    <spawnThingOnRemoved>MemoryAssistant</spawnThingOnRemoved>
+    <stages>
+      <li>
+        <statOffsets>
+          <GlobalLearningFactor>-0.2</GlobalLearningFactor>
+        </statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_ReactOnDamage">
+        <damageDefIncoming>EMP</damageDefIncoming>
+        <createHediff>BrainShock</createHediff>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <ThingDef ParentName="BodyPartBionicImperialBase">
+    <defName>MemoryAssistant</defName>
+    <label>memory assistant</label>
+    <description>A memory refreshment implant that help retains experiences by stimulating brain cells, lowering the speed of skill loss to only 20%.</description>
+    <descriptionHyperlinks><RecipeDef>InstallMemoryAssistant</RecipeDef></descriptionHyperlinks>
+    <thingSetMakerTags><li>RewardStandardLowFreq</li></thingSetMakerTags>
+    <costList>
+      <Plasteel>15</Plasteel>
+      <ComponentSpacer>4</ComponentSpacer>
+    </costList>
+    <recipeMaker>
+      <researchPrerequisite>MemoryImplants</researchPrerequisite>
+    </recipeMaker>
+  </ThingDef>
+
+  <RecipeDef ParentName="SurgeryInstallImplantBase">
+    <defName>InstallMemoryAssistant</defName>
+    <label>install memory assistant</label>
+    <description>Install a memory assistant.</description>
+    <descriptionHyperlinks><ThingDef>MemoryAssistant</ThingDef></descriptionHyperlinks>
+    <jobString>Installing memory assistant.</jobString>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MemoryAssistant</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MemoryAssistant</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <appliedOnFixedBodyParts>
+      <li>Brain</li>
+    </appliedOnFixedBodyParts>
+    <addsHediff>MemoryAssistant</addsHediff>
+  </RecipeDef>
+
+</Defs>
