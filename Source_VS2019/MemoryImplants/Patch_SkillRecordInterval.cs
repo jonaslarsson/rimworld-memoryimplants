@@ -1,91 +1,49 @@
-﻿using HarmonyLib;
+﻿using System.Reflection;
+using System;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection.Emit;
+using HarmonyLib;
 using RimWorld;
 using Verse;
-using System.Reflection;
 
-namespace MemoryImplants
-{
-	[HarmonyPriority(Priority.HigherThanNormal)]
+namespace MemoryImplants {
+	
 	[HarmonyPatch(typeof(SkillRecord))]
 	[HarmonyPatch(nameof(SkillRecord.Interval))]
-	class Patch_SkillRecordInterval
-    {
-		static FieldInfo pawnField = AccessTools.Field(typeof(SkillRecord), "pawn");
+	static class Patch_SkillRecordInterval {
 
-		static bool Prefix(SkillRecord __instance)
-		{
-			if (__instance.levelInt >= 10)
-			{
-				Pawn pawn = pawnField.GetValue(__instance) as Pawn;
-				float memoryTraitModifier = pawn.story.traits.HasTrait(TraitDefOf.GreatMemory) ? 0.5f : 1f;
-				float memoryImplantModifier = pawn.health.hediffSet.HasHediff(HediffDef.Named("MemoryAssistant")) ? 0.2f : 1f;
-				__instance.Learn(LevelMultiplier(__instance.levelInt) * memoryTraitModifier * memoryImplantModifier);
+		public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
+			List<CodeInstruction> instructionList = instructions.ToList();
+
+			int index = instructionList.FindLastIndex(instruction => instruction.opcode == OpCodes.Stloc_0);
+
+			if (index == -1) {
+				ReportFailure();
+				return instructions;
 			}
-			return false;
+
+			List<CodeInstruction> collection = new List<CodeInstruction>() {
+				new CodeInstruction(OpCodes.Ldloc_0),
+				new CodeInstruction(OpCodes.Ldarg_0),
+				CodeInstruction.Call(typeof(Patch_SkillRecordInterval), nameof(Patch_SkillRecordInterval.ReturnMemoryImplantMultiplier)),
+				new CodeInstruction(OpCodes.Mul),
+				new CodeInstruction(OpCodes.Stloc_0),
+			};
+
+			instructionList.InsertRange(index + 1, collection);
+
+			return instructionList.AsEnumerable();
 		}
 
-		public static float LevelMultiplier(int levelInt)
-		{
-			switch (levelInt)
-			{
-				case 10: return -0.1f;
-				case 11: return -0.2f;
-				case 12: return -0.4f;
-				case 13: return -0.6f;
-				case 14: return -1f;
-				case 15: return -1.8f;
-				case 16: return -2.8f;
-				case 17: return -4f;
-				case 18: return -6f;
-				case 19: return -8f;
-				case 20: return -12f;
-				default: return 0f;
-			}
+		public static void ReportFailure() {
+			var patches = Harmony.GetPatchInfo(AccessTools.Constructor(typeof(RimWorld.SkillRecord)));
+			Log.Error($"[MEMORY IMPLANTS] Failed to patch RimWorld.SkillRecord.Interval. This generally means the mod isn't working due to some incompatibility or whatever. RimWorld.SkillRecord now has the following patches: prefixes:{patches?.Prefixes?.ToStringSafeEnumerable()}, postfixes: {patches?.Postfixes?.ToStringSafeEnumerable()}, transpilers: {patches?.Transpilers?.ToStringSafeEnumerable()}, finalizers: {patches?.Finalizers?.ToStringSafeEnumerable()}");
 		}
 
-		/* Original code
-		public void Interval()
-		{
-			float num = this.pawn.story.traits.HasTrait(TraitDefOf.GreatMemory) ? 0.5f : 1f;
-			switch (this.levelInt)
-			{
-				case 10:
-					this.Learn(-0.1f * num, false);
-					return;
-				case 11:
-					this.Learn(-0.2f * num, false);
-					return;
-				case 12:
-					this.Learn(-0.4f * num, false);
-					return;
-				case 13:
-					this.Learn(-0.6f * num, false);
-					return;
-				case 14:
-					this.Learn(-1f * num, false);
-					return;
-				case 15:
-					this.Learn(-1.8f * num, false);
-					return;
-				case 16:
-					this.Learn(-2.8f * num, false);
-					return;
-				case 17:
-					this.Learn(-4f * num, false);
-					return;
-				case 18:
-					this.Learn(-6f * num, false);
-					return;
-				case 19:
-					this.Learn(-8f * num, false);
-					return;
-				case 20:
-					this.Learn(-12f * num, false);
-					return;
-				default:
-					return;
-			}
+		public static float ReturnMemoryImplantMultiplier(this SkillRecord skillRecord) {
+			return skillRecord.Pawn.health.hediffSet.HasHediff(HediffDef.Named("MemoryAssistant")) ? 0.2f : 1f;
 		}
-		*/
 	}
 }
