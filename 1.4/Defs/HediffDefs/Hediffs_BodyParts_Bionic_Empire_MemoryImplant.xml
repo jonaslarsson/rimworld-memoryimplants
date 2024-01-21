@@ -69,7 +69,7 @@
   
   <RecipeDef ParentName="SurgeryRemoveImplantBase">
     <defName>RemoveMemoryAssistant</defName>
-    <label>remove neurocalculator</label>
+    <label>remove memory assistant</label>
     <description>Remove memory assistant.</description>
     <descriptionHyperlinks>
       <ThingDef>MemoryAssistant</ThingDef>
